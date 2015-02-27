@@ -3,6 +3,7 @@ package com.pickaxis.grid.datamine;
 import com.github.arnabk.statsd.NonBlockingStatsDEventClient;
 import com.pickaxis.grid.core.GridPlugin;
 import com.pickaxis.grid.core.server.ServerDataManager;
+import com.pickaxis.grid.datamine.metrics.listeners.MetricListeners;
 import com.timgroup.statsd.NonBlockingStatsDClient;
 import com.timgroup.statsd.StatsDClient;
 import java.io.IOException;
@@ -25,6 +26,8 @@ public class DataMinePlugin extends JavaPlugin
     @Getter
     @Setter( AccessLevel.PRIVATE )
     private static DataMinePlugin instance;
+    
+    private String instanceName;
     
     private StatsDClient statsd;
     
@@ -90,6 +93,8 @@ public class DataMinePlugin extends JavaPlugin
      */
     public void initialize()
     {
+        this.setInstanceName( this.findInstanceName() );
+        
         this.setStatsd( new NonBlockingStatsDClient( this.getConfig().getString( "prefix", "minecraft" ),
                                                      this.getConfig().getString( "host", "localhost" ),
                                                      this.getConfig().getInt( "port", 8125 ),
@@ -109,6 +114,21 @@ public class DataMinePlugin extends JavaPlugin
             this.getTask().runTaskTimer( this, this.getConfig().getInt( "delay", 300 ), this.getConfig().getInt( "interval", 100 ) );
         }
         
+        for( MetricListeners type : MetricListeners.values() )
+        {
+            try
+            {
+                this.getServer().getPluginManager().registerEvents( type.getCls().newInstance(), this );
+            }
+            catch( InstantiationException | IllegalAccessException ex )
+            {
+                this.getLogger().log( Level.SEVERE, "Couldn't initialize MetricListener:" + type.name(), ex );
+            }
+        }
+        
+        this.getEventsd().event( this.getInstanceName() + "'s DataMine plugin has initialized", 
+                                 "See " + this.getInstanceName() + "'s <a href='https://app.datadoghq.com/dash/dash/41397?live=true&tile_size=m&tpl_var_scope=instance:" + this.getInstanceName() + "'>dashboard</a>" );
+        
         this.getLogger().log( Level.INFO, "DataMine initialization completed." );
     }
     
@@ -117,7 +137,7 @@ public class DataMinePlugin extends JavaPlugin
      * 
      * @return The name of this instance.
      */
-    public String getInstanceName()
+    public String findInstanceName()
     {
         if( !this.getConfig().getString( "instance", "" ).isEmpty() )
         {
