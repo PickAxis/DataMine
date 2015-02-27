@@ -1,5 +1,6 @@
 package com.pickaxis.grid.datamine;
 
+import com.github.arnabk.statsd.NonBlockingStatsDEventClient;
 import com.pickaxis.grid.core.GridPlugin;
 import com.pickaxis.grid.core.server.ServerDataManager;
 import com.timgroup.statsd.NonBlockingStatsDClient;
@@ -26,6 +27,8 @@ public class DataMinePlugin extends JavaPlugin
     private static DataMinePlugin instance;
     
     private StatsDClient statsd;
+    
+    private NonBlockingStatsDEventClient eventsd;
     
     private SendMetricsTask task;
     
@@ -92,6 +95,10 @@ public class DataMinePlugin extends JavaPlugin
                                                      this.getConfig().getInt( "port", 8125 ),
                                                      new String[] { "instance:" + this.getInstanceName() } ) );
         
+        this.setEventsd( new NonBlockingStatsDEventClient( this.getConfig().getString( "host", "localhost" ),
+                                                           this.getConfig().getInt( "port", 8125 ),
+                                                           new String[] { "isntance:", this.getInstanceName() } ) );
+        
         this.setTask( new SendMetricsTask() );
         if( this.getConfig().getBoolean( "async", true ) )
         {
@@ -101,6 +108,8 @@ public class DataMinePlugin extends JavaPlugin
         {
             this.getTask().runTaskTimer( this, this.getConfig().getInt( "delay", 300 ), this.getConfig().getInt( "interval", 100 ) );
         }
+        
+        this.getLogger().log( Level.INFO, "DataMine initialization completed." );
     }
     
     /**
