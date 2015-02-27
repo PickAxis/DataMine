@@ -40,10 +40,11 @@ public class WorldMetrics extends AbstractMetric
             
             for( EntityType type : EntityType.values() )
             {
-                if( DataMinePlugin.getInstance().isDebug() )
+                if( type.equals( EntityType.UNKNOWN ) )
                 {
-                    DataMinePlugin.getInstance().getLogger().log( Level.INFO, "Collecting metric for entity type: {0}", type.name() );
+                    continue;
                 }
+                
                 this.getClient().gauge( "world.entities", world.getEntitiesByClass( type.getEntityClass() ).size(), "world:" + world.getName(), "type:" + type.name() );
             }
         }
