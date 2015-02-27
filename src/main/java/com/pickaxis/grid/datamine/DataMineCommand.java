@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 
 public class DataMineCommand implements CommandExecutor
 {
-    public static final String MESSAGE_PREFIX = ChatColor.DARK_AQUA + "[Grid Vote Receiver] " + ChatColor.AQUA;
+    public static final String MESSAGE_PREFIX = ChatColor.DARK_AQUA + "[DataMine] " + ChatColor.AQUA;
     
     public void message( CommandSender sender, String message )
     {
