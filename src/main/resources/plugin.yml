@@ -1,0 +1,9 @@
+name: DataMine
+version: ${project.version}
+author: NickG365
+main: com.pickaxis.grid.datamine.DataMinePlugin
+softdepend: [Grid]
+commands:
+    datamine:
+        description: DataMine build information command.
+        usage: /<command>
