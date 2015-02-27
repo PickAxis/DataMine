@@ -94,8 +94,8 @@
                     <abbrevLength>7</abbrevLength>
                     <skip>false</skip>
                     <excludeProperties>
-                      <excludeProperty>git.remote.*</excludeProperty>
-                      <excludeProperty>*.email</excludeProperty>
+                      <excludeProperty>git\.remote\..*</excludeProperty>
+                      <excludeProperty>.*\.email</excludeProperty>
                     </excludeProperties>
                     <gitDescribe>
                         <skip>false</skip>
