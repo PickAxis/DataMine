@@ -46,7 +46,7 @@ public class ServerMetrics extends AbstractMetric
         
         if( DataMinePlugin.getInstance().isDebug() )
         {
-            DataMinePlugin.getInstance().getLogger().log( Level.INFO, "WorldMetrics collected in {0}ns.", System.nanoTime() - startTime );
+            DataMinePlugin.getInstance().getLogger().log( Level.INFO, "ServerMetrics collected in {0}ns.", System.nanoTime() - startTime );
         }
     }
 }
