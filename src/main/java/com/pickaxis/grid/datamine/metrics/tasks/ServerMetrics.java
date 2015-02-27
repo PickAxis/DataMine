@@ -1,4 +1,4 @@
-package com.pickaxis.grid.datamine.metrics;
+package com.pickaxis.grid.datamine.metrics.tasks;
 
 import com.pickaxis.grid.datamine.DataMinePlugin;
 import java.util.logging.Level;
@@ -9,7 +9,7 @@ import org.bukkit.plugin.Plugin;
 /**
  * Sends server performance metrics.
  */
-public class ServerMetrics extends AbstractMetric
+public class ServerMetrics extends AbstractMetricTask
 {
     @Override
     public void collect()

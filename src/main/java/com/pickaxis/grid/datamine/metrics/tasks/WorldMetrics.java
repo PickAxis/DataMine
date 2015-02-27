@@ -1,4 +1,4 @@
-package com.pickaxis.grid.datamine.metrics;
+package com.pickaxis.grid.datamine.metrics.tasks;
 
 import com.pickaxis.grid.datamine.DataMinePlugin;
 import java.util.logging.Level;
@@ -10,7 +10,7 @@ import org.bukkit.entity.EntityType;
 /**
  * Sends world metrics.
  */
-public class WorldMetrics extends AbstractMetric
+public class WorldMetrics extends AbstractMetricTask
 {
     @Override
     public void collect()

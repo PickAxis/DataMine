@@ -1,4 +1,4 @@
-package com.pickaxis.grid.datamine.metrics;
+package com.pickaxis.grid.datamine.metrics.tasks;
 
 /**
  * MetricCollector interface.
