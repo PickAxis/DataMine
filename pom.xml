@@ -40,6 +40,12 @@
             <artifactId>java-dogstatsd-client</artifactId>
             <version>1.0.1</version>
         </dependency>
+        <dependency>
+            <artifactId>commons-math3</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <type>jar</type>
+            <version>3.4.1</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>DataMine</finalName>
@@ -84,6 +90,7 @@
                             <artifactSet>
                                 <includes>
                                     <include>com.github.arnabk:java-dogstatsd-client</include>
+                                    <include>org.apache.commons:commons-math3</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
