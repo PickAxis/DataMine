@@ -7,11 +7,14 @@ import com.pickaxis.grid.datamine.metrics.listeners.MetricListeners;
 import com.timgroup.statsd.NonBlockingStatsDClient;
 import com.timgroup.statsd.StatsDClient;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.ArrayUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -95,14 +98,23 @@ public class DataMinePlugin extends JavaPlugin
     {
         this.setInstanceName( this.findInstanceName() );
         
+        List<String> configTags = new ArrayList<>();
+        if( this.getConfig().isList( "tags" ) )
+        {
+            configTags = this.getConfig().getStringList( "tags" );
+        }
+        configTags.add( "instance:" + this.getInstanceName() );
+        configTags.add( "environment:" + this.getConfig().getString( "environment", "production" ) );
+        String[] tags = configTags.toArray( new String[ 0 ] );
+        
         this.setStatsd( new NonBlockingStatsDClient( this.getConfig().getString( "prefix", "minecraft" ),
                                                      this.getConfig().getString( "host", "localhost" ),
                                                      this.getConfig().getInt( "port", 8125 ),
-                                                     new String[] { "instance:" + this.getInstanceName() } ) );
+                                                     tags ) );
         
         this.setEventsd( new NonBlockingStatsDEventClient( this.getConfig().getString( "host", "localhost" ),
                                                            this.getConfig().getInt( "port", 8125 ),
-                                                           new String[] { "instance:" + this.getInstanceName() } ) );
+                                                           tags ) );
         
         this.setTask( new SendMetricsTask() );
         if( this.getConfig().getBoolean( "async", true ) )
@@ -129,7 +141,7 @@ public class DataMinePlugin extends JavaPlugin
         if( this.getConfig().getBoolean( "events.startup", true ) )
         {
             this.getEventsd().event( this.getInstanceName() + "'s DataMine plugin has initialized", 
-                                     "See " + this.getInstanceName() + "'s [dashboard](https://app.datadoghq.com/dash/dash/" + this.getConfig().getInt( "dashboard", 41397 ) + "?live=true&tile_size=m&tpl_var_scope=instance:" + this.getInstanceName() + ")" );
+                                     "See " + this.getInstanceName() + "'s [dashboard](https://app.datadoghq.com/dash/dash/" + this.getConfig().getInt( "dashboard", 0 ) + "?live=true&tile_size=m&tpl_var_scope=instance:" + this.getInstanceName() + ")" );
         }
         
         this.getLogger().log( Level.INFO, "DataMine initialization completed." );
