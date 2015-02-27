@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -60,6 +61,32 @@ public class DataMinePlugin extends JavaPlugin
         
         this.getCommand( "datamine" ).setExecutor( new DataMineCommand() );
         
+        if( !Bukkit.getPluginManager().isPluginEnabled( "Grid" ) || ( (GridPlugin) Bukkit.getPluginManager().getPlugin( "Grid" ) ).isGridInitialized() )
+        {
+            this.initialize();
+        }
+        else
+        {
+            this.getServer().getPluginManager().registerEvents( new GridListener(), this );
+        }
+    }
+    
+    /**
+     * Cancels metric collection task, unregisters listeners.
+     */
+    @Override
+    public void onDisable()
+    {
+        this.getTask().cancel();
+        
+        HandlerList.unregisterAll( this );
+    }
+    
+    /**
+     * Begins metric collection.
+     */
+    public void initialize()
+    {
         this.setStatsd( new NonBlockingStatsDClient( this.getConfig().getString( "prefix", "minecraft" ),
                                                      this.getConfig().getString( "host", "localhost" ),
                                                      this.getConfig().getInt( "port", 8125 ),
@@ -70,22 +97,13 @@ public class DataMinePlugin extends JavaPlugin
     }
     
     /**
-     * Cancels metric collection task.
-     */
-    @Override
-    public void onDisable()
-    {
-        this.getTask().cancel();
-    }
-    
-    /**
      * Gets the name to identify this instance.
      * 
      * @return The name of this instance.
      */
     public String getInstanceName()
     {
-        if( !this.getConfig().getString( "instance" ).isEmpty() )
+        if( !this.getConfig().getString( "instance", "" ).isEmpty() )
         {
             return this.getConfig().getString( "instance" );
         }
