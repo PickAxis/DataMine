@@ -44,6 +44,8 @@ public class ServerMetrics extends AbstractMetric
         this.getClient().gauge( "memory.allocated", Runtime.getRuntime().totalMemory() );
         this.getClient().gauge( "memory.used", ( Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() ) );
         
+        this.getClient().gauge( "players.maximum", Bukkit.getServer().getMaxPlayers() );
+        
         if( DataMinePlugin.getInstance().isDebug() )
         {
             DataMinePlugin.getInstance().getLogger().log( Level.INFO, "ServerMetrics collected in {0}ns.", System.nanoTime() - startTime );
