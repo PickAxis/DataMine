@@ -1,5 +1,6 @@
 package com.pickaxis.grid.datamine;
 
+import com.pickaxis.grid.datamine.metrics.tasks.MetricCollectors;
 import com.pickaxis.grid.datamine.metrics.tasks.MetricCollector;
 import java.util.Collection;
 import java.util.HashSet;

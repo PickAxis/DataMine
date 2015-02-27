@@ -1,8 +1,5 @@
-package com.pickaxis.grid.datamine;
+package com.pickaxis.grid.datamine.metrics.tasks;
 
-import com.pickaxis.grid.datamine.metrics.tasks.ServerMetrics;
-import com.pickaxis.grid.datamine.metrics.tasks.WorldMetrics;
-import com.pickaxis.grid.datamine.metrics.tasks.MetricCollector;
 import lombok.Getter;
 
 /**
@@ -14,7 +11,7 @@ public enum MetricCollectors
     WORLD( WorldMetrics.class );
     
     @Getter
-    private Class<? extends MetricCollector> cls;
+    private final Class<? extends MetricCollector> cls;
     
     MetricCollectors( Class<? extends MetricCollector> cls )
     {
