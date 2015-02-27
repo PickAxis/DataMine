@@ -126,8 +126,11 @@ public class DataMinePlugin extends JavaPlugin
             }
         }
         
-        this.getEventsd().event( this.getInstanceName() + "'s DataMine plugin has initialized", 
-                                 "See " + this.getInstanceName() + "'s <a href='https://app.datadoghq.com/dash/dash/41397?live=true&tile_size=m&tpl_var_scope=instance:" + this.getInstanceName() + "'>dashboard</a>" );
+        if( this.getConfig().getBoolean( "events.startup", true ) )
+        {
+            this.getEventsd().event( this.getInstanceName() + "'s DataMine plugin has initialized", 
+                                     "See " + this.getInstanceName() + "'s <a href='https://app.datadoghq.com/dash/dash/41397?live=true&tile_size=m&tpl_var_scope=instance:" + this.getInstanceName() + "'>dashboard</a>" );
+        }
         
         this.getLogger().log( Level.INFO, "DataMine initialization completed." );
     }
