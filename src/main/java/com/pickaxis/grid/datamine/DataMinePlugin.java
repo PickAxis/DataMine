@@ -93,7 +93,14 @@ public class DataMinePlugin extends JavaPlugin
                                                      new String[] { "instance:" + this.getInstanceName() } ) );
         
         this.setTask( new SendMetricsTask() );
-        this.getTask().runTaskTimerAsynchronously( this, 300, 100 );
+        if( this.getConfig().getBoolean( "async", true ) )
+        {
+            this.getTask().runTaskTimerAsynchronously( this, this.getConfig().getInt( "delay", 300 ), this.getConfig().getInt( "interval", 100 ) );
+        }
+        else
+        {
+            this.getTask().runTaskTimer( this, this.getConfig().getInt( "delay", 300 ), this.getConfig().getInt( "interval", 100 ) );
+        }
     }
     
     /**
