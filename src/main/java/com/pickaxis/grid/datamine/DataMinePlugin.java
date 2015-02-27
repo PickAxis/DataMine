@@ -102,7 +102,7 @@ public class DataMinePlugin extends JavaPlugin
         
         this.setEventsd( new NonBlockingStatsDEventClient( this.getConfig().getString( "host", "localhost" ),
                                                            this.getConfig().getInt( "port", 8125 ),
-                                                           new String[] { "isntance:", this.getInstanceName() } ) );
+                                                           new String[] { "instance:" + this.getInstanceName() } ) );
         
         this.setTask( new SendMetricsTask() );
         if( this.getConfig().getBoolean( "async", true ) )
@@ -129,7 +129,7 @@ public class DataMinePlugin extends JavaPlugin
         if( this.getConfig().getBoolean( "events.startup", true ) )
         {
             this.getEventsd().event( this.getInstanceName() + "'s DataMine plugin has initialized", 
-                                     "See " + this.getInstanceName() + "'s <a href='https://app.datadoghq.com/dash/dash/" + this.getConfig().getInt( "dashboard", 41397 ) + "?live=true&tile_size=m&tpl_var_scope=instance:" + this.getInstanceName() + "'>dashboard</a>" );
+                                     "See " + this.getInstanceName() + "'s [dashboard](https://app.datadoghq.com/dash/dash/" + this.getConfig().getInt( "dashboard", 41397 ) + "?live=true&tile_size=m&tpl_var_scope=instance:" + this.getInstanceName() + ")" );
         }
         
         this.getLogger().log( Level.INFO, "DataMine initialization completed." );
