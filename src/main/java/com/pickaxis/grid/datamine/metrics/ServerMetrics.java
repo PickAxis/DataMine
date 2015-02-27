@@ -40,9 +40,9 @@ public class ServerMetrics extends AbstractMetric
         this.getClient().gauge( "plugins.loaded", Bukkit.getServer().getPluginManager().getPlugins().length );
         this.getClient().gauge( "plugins.enabled", pluginsEnabled );
         
-        this.getClient().gauge( "memory.maximum", Runtime.getRuntime().maxMemory() / 1048576 );
-        this.getClient().gauge( "memory.allocated", Runtime.getRuntime().totalMemory() / 1048576 );
-        this.getClient().gauge( "memory.used", ( Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() ) / 1048576 );
+        this.getClient().gauge( "memory.maximum", Runtime.getRuntime().maxMemory() );
+        this.getClient().gauge( "memory.allocated", Runtime.getRuntime().totalMemory() );
+        this.getClient().gauge( "memory.used", ( Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() ) );
         
         if( DataMinePlugin.getInstance().isDebug() )
         {
