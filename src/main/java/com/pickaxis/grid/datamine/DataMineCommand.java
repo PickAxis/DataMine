@@ -24,14 +24,14 @@ public class DataMineCommand implements CommandExecutor
                               gridvr.getBuildInfo().getProperty( "git.commit.id.describe" ) + ")" );
         
         String builtBy = "";
-        if( sender.hasPermission( "grid.cmd.grid.info.extended" ) )
+        if( sender.hasPermission( "grid.cmd.datamine.info.extended" ) )
         {
             builtBy = "by " + gridvr.getBuildInfo().getProperty( "git.build.user.name" );
         }
         this.message( sender, "Built " + builtBy + " on " +
                               gridvr.getBuildInfo().getProperty( "git.build.time" ) );
         
-        if( sender.hasPermission( "grid.cmd.grid.info.extended" ) )
+        if( sender.hasPermission( "grid.cmd.datamine.info.extended" ) )
         {
             this.message( sender, "Full Commit Hash: " + gridvr.getBuildInfo().getProperty( "git.commit.id" ) );
             this.message( sender, "Commit Message: " + gridvr.getBuildInfo().getProperty( "git.commit.message.short" ) );
