@@ -43,6 +43,6 @@ public class WorldListener extends AbstractMetricListener
                    ignoreCancelled = true )
     public void onEntitySpawn( EntitySpawnEvent event )
     {
-        this.getClient().increment( "world.entity_spawns", "type:" + event.getEntityType().name() );
+        this.getClient().increment( "world.entities.spawns", "type:" + event.getEntityType().name() );
     }
 }
