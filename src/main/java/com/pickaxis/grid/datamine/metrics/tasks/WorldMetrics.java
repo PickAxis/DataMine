@@ -1,6 +1,7 @@
 package com.pickaxis.grid.datamine.metrics.tasks;
 
 import com.pickaxis.grid.datamine.DataMinePlugin;
+import java.util.ConcurrentModificationException;
 import java.util.logging.Level;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -17,38 +18,45 @@ public class WorldMetrics extends AbstractMetricTask
     {
         long startTime = System.nanoTime();
         
-        this.getClient().gauge( "worlds", Bukkit.getServer().getWorlds().size() );
-        
-        for( World world : Bukkit.getServer().getWorlds() )
+        try
         {
-            this.getClient().gauge( "players.online", world.getPlayers().size(), "world:" + world.getName() );
-            
-            int tiles = 0;
-            try
+            this.getClient().gauge( "worlds", Bukkit.getServer().getWorlds().size() );
+
+            for( World world : Bukkit.getServer().getWorlds() )
             {
-                for( Chunk chunk : world.getLoadedChunks() )
+                this.getClient().gauge( "players.online", world.getPlayers().size(), "world:" + world.getName() );
+
+                int tiles = 0;
+                try
                 {
-                    tiles += chunk.getTileEntities().length;
+                    for( Chunk chunk : world.getLoadedChunks() )
+                    {
+                        tiles += chunk.getTileEntities().length;
+                    }
                 }
-            }
-            catch( ClassCastException ex )
-            {
-                DataMinePlugin.getInstance().getLogger().log( Level.SEVERE, "Corrupted chunk data on world " + world, ex );
-            }
-            this.getClient().gauge( "world.tiles", tiles, "world:" + world.getName() );
-            this.getClient().gauge( "world.chunks", world.getLoadedChunks().length, "world:" + world.getName() );
-            
-            for( EntityType type : EntityType.values() )
-            {
-                if( type.equals( EntityType.UNKNOWN ) )
+                catch( ClassCastException ex )
                 {
-                    continue;
+                    DataMinePlugin.getInstance().getLogger().log( Level.SEVERE, "Corrupted chunk data on world " + world, ex );
                 }
-                
-                this.getClient().gauge( "world.entities", world.getEntitiesByClass( type.getEntityClass() ).size(), "world:" + world.getName(), "type:" + type.name() );
+                this.getClient().gauge( "world.tiles", tiles, "world:" + world.getName() );
+                this.getClient().gauge( "world.chunks", world.getLoadedChunks().length, "world:" + world.getName() );
+
+                for( EntityType type : EntityType.values() )
+                {
+                    if( type.equals( EntityType.UNKNOWN ) )
+                    {
+                        continue;
+                    }
+
+                    this.getClient().gauge( "world.entities", world.getEntitiesByClass( type.getEntityClass() ).size(), "world:" + world.getName(), "type:" + type.name() );
+                }
+
+                this.getClient().gauge( "world.entities.living", world.getLivingEntities().size() );
             }
-            
-            this.getClient().gauge( "world.entities.living", world.getLivingEntities().size() );
+        }
+        catch( ConcurrentModificationException ex )
+        {
+            DataMinePlugin.getInstance().getLogger().log( Level.INFO, "Encountered a CME while collecting world metrics.  Will continue next run." );
         }
         
         if( DataMinePlugin.getInstance().isDebug() )
