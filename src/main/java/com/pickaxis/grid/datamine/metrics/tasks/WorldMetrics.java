@@ -47,6 +47,8 @@ public class WorldMetrics extends AbstractMetricTask
                 
                 this.getClient().gauge( "world.entities", world.getEntitiesByClass( type.getEntityClass() ).size(), "world:" + world.getName(), "type:" + type.name() );
             }
+            
+            this.getClient().gauge( "world.entities.living", world.getLivingEntities().size() );
         }
         
         if( DataMinePlugin.getInstance().isDebug() )
