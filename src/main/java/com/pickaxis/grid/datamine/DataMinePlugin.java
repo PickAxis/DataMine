@@ -93,7 +93,7 @@ public class DataMinePlugin extends JavaPlugin
     /**
      * Begins metric collection.
      */
-    public void initialize()
+    void initialize()
     {
         this.setInstanceName( this.findInstanceName() );
         
@@ -151,7 +151,7 @@ public class DataMinePlugin extends JavaPlugin
      * 
      * @return The name of this instance.
      */
-    public String findInstanceName()
+    private String findInstanceName()
     {
         if( !this.getConfig().getString( "instance", "" ).isEmpty() )
         {
