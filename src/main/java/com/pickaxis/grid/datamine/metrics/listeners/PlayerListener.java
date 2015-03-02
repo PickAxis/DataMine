@@ -26,15 +26,13 @@ public class PlayerListener extends AbstractMetricListener
         this.getClient().increment( "players.logouts" );
     }
     
-    @EventHandler( priority = EventPriority.MONITOR, 
-                   ignoreCancelled = true )
+    @EventHandler( priority = EventPriority.MONITOR )
     public void onPlayerCommand( PlayerCommandPreprocessEvent event )
     {
         this.getClient().increment( "players.commands" );
     }
     
-    @EventHandler( priority = EventPriority.MONITOR, 
-                   ignoreCancelled = true )
+    @EventHandler( priority = EventPriority.MONITOR )
     public void onPlayerChat( AsyncPlayerChatEvent event )
     {
         this.getClient().increment( "players.chat_messages" );
