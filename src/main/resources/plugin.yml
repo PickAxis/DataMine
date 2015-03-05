@@ -7,3 +7,6 @@ commands:
     datamine:
         description: DataMine build information command.
         usage: /<command>
+    lag:
+        description: Submits a lag report.
+        usage: /<command>
