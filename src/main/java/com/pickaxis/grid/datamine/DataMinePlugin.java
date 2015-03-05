@@ -137,6 +137,8 @@ public class DataMinePlugin extends JavaPlugin
             }
         }
         
+        this.getCommand( "lag" ).setExecutor( new LagReportCommand() );
+        
         if( this.getConfig().getBoolean( "events.startup", true ) )
         {
             this.getEventsd().event( this.getInstanceName() + "'s DataMine plugin has initialized", 
