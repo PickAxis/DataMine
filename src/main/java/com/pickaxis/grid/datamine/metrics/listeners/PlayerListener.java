@@ -3,6 +3,8 @@ package com.pickaxis.grid.datamine.metrics.listeners;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -12,6 +14,15 @@ import org.bukkit.event.player.PlayerQuitEvent;
  */
 public class PlayerListener extends AbstractMetricListener
 {
+    @EventHandler( priority = EventPriority.MONITOR )
+    public void onAsyncPlayerPreLogin( AsyncPlayerPreLoginEvent event )
+    {
+        if( event.getResult() != PlayerPreLoginEvent.Result.ALLOWED )
+        {
+            this.getClient().increment( "players.logins.disallowed" );
+        }
+    }
+    
     @EventHandler( priority = EventPriority.MONITOR, 
                    ignoreCancelled = true )
     public void onPlayerLogin( PlayerLoginEvent event )
