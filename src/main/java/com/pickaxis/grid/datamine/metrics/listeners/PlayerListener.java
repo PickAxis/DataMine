@@ -23,15 +23,13 @@ public class PlayerListener extends AbstractMetricListener
         }
     }
     
-    @EventHandler( priority = EventPriority.MONITOR, 
-                   ignoreCancelled = true )
+    @EventHandler( priority = EventPriority.MONITOR )
     public void onPlayerLogin( PlayerLoginEvent event )
     {
         this.getClient().increment( "players.logins" );
     }
     
-    @EventHandler( priority = EventPriority.MONITOR, 
-                   ignoreCancelled = true )
+    @EventHandler( priority = EventPriority.MONITOR )
     public void onPlayerLogout( PlayerQuitEvent event )
     {
         this.getClient().increment( "players.logouts" );
