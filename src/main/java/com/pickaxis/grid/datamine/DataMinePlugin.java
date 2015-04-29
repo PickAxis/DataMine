@@ -137,7 +137,10 @@ public class DataMinePlugin extends JavaPlugin
             }
         }
         
-        this.getCommand( "lag" ).setExecutor( new LagReportCommand() );
+        if( this.getConfig().getBoolean( "commands.lag", true ) )
+        {
+            this.getCommand( "lag" ).setExecutor( new LagReportCommand() );
+        }
         
         if( this.getConfig().getBoolean( "events.startup", true ) )
         {
