@@ -8,7 +8,8 @@ import lombok.Getter;
 public enum MetricListeners
 {
     PLAYER( PlayerListener.class ),
-    WORLD( WorldListener.class );
+    WORLD( WorldListener.class ),
+    ENTITY( EntityListener.class );
     
     @Getter
     private final Class<? extends MetricListener> cls;
