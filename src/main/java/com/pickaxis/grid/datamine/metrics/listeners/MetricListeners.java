@@ -11,7 +11,8 @@ public enum MetricListeners
     WORLD( WorldListener.class ),
     ENTITY( EntityListener.class ),
     INVENTORY( InventoryListener.class ),
-    BLOCK( BlockListener.class );
+    BLOCK( BlockListener.class ),
+    CHUNK( ChunkListener.class );
     
     @Getter
     private final Class<? extends MetricListener> cls;
