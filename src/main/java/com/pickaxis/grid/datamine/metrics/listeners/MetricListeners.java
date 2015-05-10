@@ -10,7 +10,8 @@ public enum MetricListeners
     PLAYER( PlayerListener.class ),
     WORLD( WorldListener.class ),
     ENTITY( EntityListener.class ),
-    INVENTORY( InventoryListener.class );
+    INVENTORY( InventoryListener.class ),
+    BLOCK( BlockListener.class );
     
     @Getter
     private final Class<? extends MetricListener> cls;
