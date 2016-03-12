@@ -1,9 +1,9 @@
 package com.pickaxis.grid.datamine;
 
-import com.pickaxis.grid.datamine.metrics.tasks.MetricCollectors;
 import com.pickaxis.grid.datamine.metrics.tasks.MetricCollector;
-import java.util.Collection;
-import java.util.HashSet;
+import com.pickaxis.grid.datamine.metrics.tasks.MetricCollectors;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import lombok.Getter;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -14,13 +14,13 @@ import org.bukkit.scheduler.BukkitRunnable;
 @Getter
 public class SendMetricsTask extends BukkitRunnable
 {
-    private final Collection<MetricCollector> collectors;
+    private final Map<Class<? extends MetricCollector>, MetricCollector> collectors;
     
     private final boolean sync;
     
     public SendMetricsTask( boolean sync )
     {
-        this.collectors = new HashSet<>();
+        this.collectors = new HashMap<>();
         this.sync = sync;
         for( MetricCollectors collector : MetricCollectors.values() )
         {
@@ -28,7 +28,7 @@ public class SendMetricsTask extends BukkitRunnable
             {
                 try
                 {
-                    this.getCollectors().add( collector.getCls().newInstance() );
+                    this.getCollectors().put( collector.getCls(), collector.getCls().newInstance() );
                 }
                 catch( InstantiationException | IllegalAccessException ex )
                 {
@@ -41,7 +41,7 @@ public class SendMetricsTask extends BukkitRunnable
     @Override
     public void run()
     {
-        for( MetricCollector collector : this.getCollectors() )
+        for( MetricCollector collector : this.getCollectors().values() )
         {
             collector.collect();
         }
