@@ -2,6 +2,8 @@ package com.pickaxis.grid.datamine.metrics.listeners;
 
 import com.github.arnabk.statsd.Priority;
 import com.pickaxis.grid.datamine.DataMinePlugin;
+import com.pickaxis.grid.datamine.SendMetricsTask;
+import com.pickaxis.grid.datamine.metrics.tasks.WorldSyncMetrics;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.world.WorldLoadEvent;
@@ -29,6 +31,11 @@ public class WorldListener extends AbstractMetricListener
                    ignoreCancelled = true )
     public void onWorldUnload( WorldUnloadEvent event )
     {
+        if( DataMinePlugin.getInstance().getSyncTask() instanceof SendMetricsTask )
+        {
+            ( (WorldSyncMetrics) DataMinePlugin.getInstance().getSyncTask().getCollectors().get( WorldSyncMetrics.class ) ).getLastTileCounts().remove( event.getWorld() );
+        }
+        
         if( !DataMinePlugin.getInstance().getConfig().getBoolean( "events.worlds", true ) )
         {
             return;
