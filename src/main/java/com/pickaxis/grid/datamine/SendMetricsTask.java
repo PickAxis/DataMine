@@ -11,23 +11,29 @@ import org.bukkit.scheduler.BukkitRunnable;
 /**
  * Sends metrics to DogStatsD.
  */
+@Getter
 public class SendMetricsTask extends BukkitRunnable
 {
-    @Getter
     public final Collection<MetricCollector> collectors;
     
-    public SendMetricsTask()
+    public final boolean sync;
+    
+    public SendMetricsTask( boolean sync )
     {
         this.collectors = new HashSet<>();
+        this.sync = sync;
         for( MetricCollectors collector : MetricCollectors.values() )
         {
-            try
+            if( collector.isSync() == this.isSync() )
             {
-                this.getCollectors().add( collector.getCls().newInstance() );
-            }
-            catch( InstantiationException | IllegalAccessException ex )
-            {
-                DataMinePlugin.getInstance().getLogger().log( Level.SEVERE, "Could not initialize collector: " + collector.name(), ex );
+                try
+                {
+                    this.getCollectors().add( collector.getCls().newInstance() );
+                }
+                catch( InstantiationException | IllegalAccessException ex )
+                {
+                    DataMinePlugin.getInstance().getLogger().log( Level.SEVERE, "Could not initialize collector: " + collector.name(), ex );
+                }
             }
         }
     }

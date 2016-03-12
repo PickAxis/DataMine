@@ -26,26 +26,6 @@ public class WorldMetrics extends AbstractMetricTask
             {
                 this.getClient().gauge( "players.online", world.getPlayers().size(), "world:" + world.getName() );
                 
-                try
-                {
-                    int tiles = 0;
-                    
-                    for( Chunk chunk : world.getLoadedChunks() )
-                    {
-                        tiles += chunk.getTileEntities().length;
-                    }
-                    
-                    this.getClient().gauge( "world.tiles", tiles, "world:" + world.getName() );
-                }
-                catch( ClassCastException ex )
-                {
-                    DataMinePlugin.getInstance().getLogger().log( Level.SEVERE, "Corrupted chunk data on world " + world, ex );
-                }
-                catch( IllegalStateException ex )
-                {
-                    DataMinePlugin.getInstance().getLogger().log( Level.INFO, "Entity added while iterating tiles asynchronously." );
-                }
-                
                 this.getClient().gauge( "world.chunks", world.getLoadedChunks().length, "world:" + world.getName() );
                 
                 for( EntityType type : EntityType.values() )

@@ -37,6 +37,8 @@ public class DataMinePlugin extends JavaPlugin
     
     private SendMetricsTask task;
     
+    private SendMetricsTask syncTask;
+    
     private Properties buildInfo;
     
     private boolean debug;
@@ -87,6 +89,11 @@ public class DataMinePlugin extends JavaPlugin
     {
         this.getTask().cancel();
         
+        if( this.getSyncTask() instanceof SendMetricsTask )
+        {
+            this.getSyncTask().cancel();
+        }
+        
         HandlerList.unregisterAll( this );
     }
     
@@ -115,7 +122,7 @@ public class DataMinePlugin extends JavaPlugin
                                                            this.getConfig().getInt( "port", 8125 ),
                                                            tags ) );
         
-        this.setTask( new SendMetricsTask() );
+        this.setTask( new SendMetricsTask( false ) );
         if( this.getConfig().getBoolean( "async", true ) )
         {
             this.getTask().runTaskTimerAsynchronously( this, this.getConfig().getInt( "delay", 300 ), this.getConfig().getInt( "interval", 100 ) );
@@ -124,6 +131,9 @@ public class DataMinePlugin extends JavaPlugin
         {
             this.getTask().runTaskTimer( this, this.getConfig().getInt( "delay", 300 ), this.getConfig().getInt( "interval", 100 ) );
         }
+        
+        this.setSyncTask( new SendMetricsTask( true ) );
+        this.getSyncTask().runTaskTimer( this, this.getConfig().getInt( "delay", 300 ) + this.getConfig().getInt( "sync-offset", 50 ), this.getConfig().getInt( "interval", 100 ) );
         
         for( MetricListeners type : MetricListeners.values() )
         {
