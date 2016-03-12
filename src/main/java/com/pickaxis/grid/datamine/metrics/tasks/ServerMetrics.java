@@ -1,29 +1,75 @@
 package com.pickaxis.grid.datamine.metrics.tasks;
 
 import com.pickaxis.grid.datamine.DataMinePlugin;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.logging.Level;
-import net.minecraft.server.v1_8_R1.MinecraftServer;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 /**
  * Sends server performance metrics.
  */
+@Getter( AccessLevel.PRIVATE )
+@Setter( AccessLevel.PRIVATE )
 public class ServerMetrics extends AbstractMetricTask
 {
+    private String versionString;
+    
+    private Field recentTpsField;
+    
+    private Method getServerMethod;
+    
+    private Object serverObject;
+    
+    private boolean reflectionSetup;
+    
+    public ServerMetrics()
+    {
+        this.setReflectionSetup( false );
+        try
+        {
+            this.setVersionString( Bukkit.getServer().getClass().getPackage().getName().split( "\\." )[ 3 ] );
+            this.setRecentTpsField( Class.forName( "net.minecraft.server." + this.versionString + ".MinecraftServer" ).getField( "recentTps" ) );
+            this.setGetServerMethod( Class.forName( "org.bukkit.craftbukkit." + this.versionString + ".CraftServer" ).getMethod( "getServer" ) );
+            this.setServerObject( getServerMethod.invoke( Bukkit.getServer() ) );
+            this.setReflectionSetup( true );
+        }
+        catch( ClassNotFoundException | NoSuchFieldException | SecurityException | NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex )
+        {
+            if( DataMinePlugin.getInstance().isDebug() )
+            {
+                DataMinePlugin.getInstance().getLogger().log( Level.WARNING, "Couldn't set up reflection, TPS metrics will not be reported.", ex );
+            }
+            else
+            {
+                DataMinePlugin.getInstance().getLogger().log( Level.WARNING, "Couldn't set up reflection, TPS metrics will not be reported." );
+            }
+        }
+    }
+    
     @Override
     public void collect()
     {
         long startTime = System.nanoTime();
         
-        try
+        if( this.isReflectionSetup() )
         {
-            Class.forName( "net.minecraft.server.v1_8_R1.MinecraftServer" );
-            this.getClient().gauge( "tps", MinecraftServer.getServer().recentTps[ 0 ] );
-        }
-        catch( ClassNotFoundException ex )
-        {
-            // Plugin needs updated.
+            try
+            {
+                this.getClient().gauge( "tps", ( (double[]) this.getRecentTpsField().get( serverObject ) )[ 0 ] );
+            }
+            catch( IllegalArgumentException | IllegalAccessException ex )
+            {
+                if( DataMinePlugin.getInstance().isDebug() )
+                {
+                    DataMinePlugin.getInstance().getLogger().log( Level.WARNING, "Couldn't report TPS.", ex );
+                }
+            }
         }
         
         this.getClient().gauge( "tasks.running", Bukkit.getServer().getScheduler().getActiveWorkers().size() );
