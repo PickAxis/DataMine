@@ -14,9 +14,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 @Getter
 public class SendMetricsTask extends BukkitRunnable
 {
-    public final Collection<MetricCollector> collectors;
+    private final Collection<MetricCollector> collectors;
     
-    public final boolean sync;
+    private final boolean sync;
     
     public SendMetricsTask( boolean sync )
     {
