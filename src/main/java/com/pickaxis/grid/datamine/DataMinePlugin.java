@@ -133,7 +133,7 @@ public class DataMinePlugin extends JavaPlugin
         }
         
         this.setSyncTask( new SendMetricsTask( true ) );
-        this.getSyncTask().runTaskTimer( this, this.getConfig().getInt( "delay", 300 ) + this.getConfig().getInt( "sync-offset", 50 ), this.getConfig().getInt( "interval", 100 ) );
+        this.getSyncTask().runTaskTimer( this, this.getConfig().getInt( "sync.delay", 350 ), this.getConfig().getInt( "sync.interval", 600 ) );
         
         for( MetricListeners type : MetricListeners.values() )
         {
