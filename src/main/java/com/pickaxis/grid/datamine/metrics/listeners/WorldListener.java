@@ -27,7 +27,7 @@ public class WorldListener extends AbstractMetricListener
     
     @EventHandler( priority = EventPriority.MONITOR, 
                    ignoreCancelled = true )
-    public void onWorldLoad( WorldUnloadEvent event )
+    public void onWorldUnload( WorldUnloadEvent event )
     {
         if( !DataMinePlugin.getInstance().getConfig().getBoolean( "events.worlds", true ) )
         {
