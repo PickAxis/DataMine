@@ -94,6 +94,15 @@ public class DataMinePlugin extends JavaPlugin
             this.getSyncTask().cancel();
         }
         
+        if( Bukkit.getPluginManager().isPluginEnabled( "Grid" ) )
+        {
+            this.getStatsd().gauge( "servers", 0, GridPlugin.getInstance().getSdm().getLocalServer().getType().name().toLowerCase() );
+        }
+        else
+        {
+            this.getStatsd().gauge( "servers", 0 );
+        }
+        
         HandlerList.unregisterAll( this );
     }
     
