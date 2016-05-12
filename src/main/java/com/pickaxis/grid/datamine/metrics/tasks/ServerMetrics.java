@@ -1,5 +1,6 @@
 package com.pickaxis.grid.datamine.metrics.tasks;
 
+import com.pickaxis.grid.core.GridPlugin;
 import com.pickaxis.grid.datamine.DataMinePlugin;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -70,6 +71,15 @@ public class ServerMetrics extends AbstractMetricTask
                     DataMinePlugin.getInstance().getLogger().log( Level.WARNING, "Couldn't report TPS.", ex );
                 }
             }
+        }
+        
+        if( Bukkit.getPluginManager().isPluginEnabled( "Grid" ) )
+        {
+            this.getClient().gauge( "servers", 1, GridPlugin.getInstance().getSdm().getLocalServer().getType().name().toLowerCase() );
+        }
+        else
+        {
+            this.getClient().gauge( "servers", 1 );
         }
         
         this.getClient().gauge( "tasks.running", Bukkit.getServer().getScheduler().getActiveWorkers().size() );
