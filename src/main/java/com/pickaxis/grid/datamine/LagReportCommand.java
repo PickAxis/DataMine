@@ -1,6 +1,5 @@
 package com.pickaxis.grid.datamine;
 
-import com.pickaxis.grid.core.util.LangUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -19,9 +18,8 @@ public class LagReportCommand implements CommandExecutor
     @Override
     public boolean onCommand( CommandSender sender, Command command, String label, String[] args )
     {
-        DataMinePlugin dm = DataMinePlugin.getInstance();
-        dm.getStatsd().increment( "players.lag_reports", "player:" + ( (Player) sender ).getUniqueId().toString() + "/" + sender.getName() );
-        this.message( sender, LangUtil.getString( "lagreport", "&eYour lag report has been successfully submitted to our server engineers.", dm) );
+        DataMinePlugin.getInstance().getStatsd().increment( "players.lag_reports", "player:" + ( (Player) sender ).getUniqueId().toString() + "/" + sender.getName() );
+        this.message( sender, DataMinePlugin.getInstance().getLangString( "lagreport", "&eYour lag report has been successfully submitted to our server engineers." ) );
         return true;
     }
 }

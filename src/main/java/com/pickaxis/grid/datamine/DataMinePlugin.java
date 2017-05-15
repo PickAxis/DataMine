@@ -15,6 +15,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -193,5 +194,17 @@ public class DataMinePlugin extends JavaPlugin
         }
         
         return Bukkit.getIp() + ":" + Bukkit.getPort();
+    }
+    
+    /**
+     * Gets a language string from the config.
+     * 
+     * @param path The path (under lang) to the string.
+     * @param def The default string.
+     * @return The requested language string.
+     */
+    public String getLangString( String path, String def )
+    {
+        return ChatColor.translateAlternateColorCodes( '&', this.getConfig().getString( "lang." + path, def ) );
     }
 }
