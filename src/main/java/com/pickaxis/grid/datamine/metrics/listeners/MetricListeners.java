@@ -7,6 +7,7 @@ import lombok.Getter;
  */
 public enum MetricListeners
 {
+    GRID( GridMetricListener.class ),
     PLAYER( PlayerListener.class ),
     WORLD( WorldListener.class ),
     ENTITY( EntityListener.class ),
