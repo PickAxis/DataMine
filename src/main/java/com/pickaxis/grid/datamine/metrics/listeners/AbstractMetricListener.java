@@ -23,4 +23,9 @@ public abstract class AbstractMetricListener implements MetricListener
     {
         return DataMinePlugin.getInstance().getEventsd();
     }
+    
+    public boolean shouldRegister()
+    {
+        return true;
+    }
 }

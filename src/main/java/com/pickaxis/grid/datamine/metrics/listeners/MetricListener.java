@@ -7,5 +7,5 @@ import org.bukkit.event.Listener;
  */
 public interface MetricListener extends Listener
 {
-    
+    public boolean shouldRegister();
 }

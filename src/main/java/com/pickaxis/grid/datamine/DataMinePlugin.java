@@ -3,6 +3,7 @@ package com.pickaxis.grid.datamine;
 import com.github.arnabk.statsd.NonBlockingStatsDEventClient;
 import com.pickaxis.grid.core.GridPlugin;
 import com.pickaxis.grid.core.server.ServerDataManager;
+import com.pickaxis.grid.datamine.metrics.listeners.MetricListener;
 import com.pickaxis.grid.datamine.metrics.listeners.MetricListeners;
 import com.timgroup.statsd.NonBlockingStatsDClient;
 import com.timgroup.statsd.StatsDClient;
@@ -147,13 +148,20 @@ public class DataMinePlugin extends JavaPlugin
         
         for( MetricListeners type : MetricListeners.values() )
         {
+            MetricListener listener;
             try
             {
-                this.getServer().getPluginManager().registerEvents( type.getCls().newInstance(), this );
+                listener = type.getCls().newInstance();
             }
             catch( InstantiationException | IllegalAccessException ex )
             {
                 this.getLogger().log( Level.SEVERE, "Couldn't initialize MetricListener:" + type.name(), ex );
+                continue;
+            }
+            
+            if( listener.shouldRegister() )
+            {
+                this.getServer().getPluginManager().registerEvents( listener, this );
             }
         }
         
