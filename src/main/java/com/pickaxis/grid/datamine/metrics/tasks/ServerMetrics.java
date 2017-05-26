@@ -39,7 +39,7 @@ public class ServerMetrics extends AbstractMetricTask
             this.setServerObject( getServerMethod.invoke( Bukkit.getServer() ) );
             this.setReflectionSetup( true );
         }
-        catch( ClassNotFoundException | NoSuchFieldException | SecurityException | NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex )
+        catch( ArrayIndexOutOfBoundsException | ClassNotFoundException | NoSuchFieldException | SecurityException | NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex )
         {
             if( DataMinePlugin.getInstance().isDebug() )
             {
